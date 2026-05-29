@@ -1,0 +1,13 @@
+/downloads/*.zip
+  Content-Type: application/zip
+  Content-Disposition: attachment
+  Cache-Control: public, max-age=3600
+
+/downloads/*.exe
+  Content-Type: application/vnd.microsoft.portable-executable
+  Content-Disposition: attachment
+  Cache-Control: public, max-age=3600
+
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin

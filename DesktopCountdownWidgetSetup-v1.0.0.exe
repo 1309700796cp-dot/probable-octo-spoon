@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chanping Tools | 桌面小工具库</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #121826;
+      --soft-ink: #354052;
+      --muted: #667085;
+      --line: #e6eaf0;
+      --paper: #ffffff;
+      --wash: #f5f7fb;
+      --blue: #2563eb;
+      --blue-dark: #1e40af;
+      --green: #16a34a;
+      --amber: #d97706;
+      --rose: #e11d48;
+      --shadow: 0 18px 48px rgba(18, 24, 38, 0.10);
+      --radius: 18px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Microsoft YaHei UI", "Microsoft YaHei", Arial, sans-serif;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(219, 234, 254, 0.92), transparent 28%),
+        radial-gradient(circle at 92% 10%, rgba(255, 237, 213, 0.84), transparent 30%),
+        linear-gradient(180deg, #fbfcff 0%, #f2f6fb 46%, #eef7f3 100%);
+      color: var(--ink);
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(18px);
+      background: rgba(255, 255, 255, 0.78);
+      border-bottom: 1px solid rgba(230, 234, 240, 0.86);
+    }
+
+    .nav {
+      width: min(1120px, calc(100% - 40px));
+      min-height: 66px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: 0;
+    }
+
+    .brand-mark {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      background: linear-gradient(135deg, #2563eb, #16a34a);
+      box-shadow: 0 10px 24px rgba(37, 99, 235, 0.18);
+      font-size: 13px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .nav-links a {
+      padding: 8px 11px;
+      border-radius: 10px;
+      text-decoration: none;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+      background: rgba(37, 99, 235, 0.08);
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 54px 0 62px;
+    }
+
+    .hero {
+      min-height: 430px;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 420px;
+      gap: 54px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      border: 1px solid rgba(37, 99, 235, 0.14);
+      border-radius: 999px;
+      background: rgba(239, 246, 255, 0.82);
+      color: var(--blue-dark);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    h1 {
+      margin: 20px 0 0;
+      max-width: 680px;
+      font-size: clamp(40px, 6vw, 68px);
+      line-height: 1.04;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      margin: 22px 0 0;
+      max-width: 660px;
+      color: var(--soft-ink);
+      font-size: 18px;
+      line-height: 1.85;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 30px;
+    }
+
+    .button {
+      min-height: 46px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 0 18px;
+      border-radius: 12px;
+      border: 1px solid transparent;
+      text-decoration: none;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .button.primary {
+      color: #ffffff;
+      background: var(--blue);
+      box-shadow: 0 12px 26px rgba(37, 99, 235, 0.22);
+    }
+
+    .button.secondary {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.84);
+      border-color: var(--line);
+    }
+
+    .mini-note {
+      margin-top: 20px;
+      max-width: 620px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .preview-wrap {
+      position: relative;
+      min-height: 340px;
+      display: grid;
+      place-items: center;
+    }
+
+    .screen-plate {
+      width: min(420px, 100%);
+      aspect-ratio: 1.08;
+      border-radius: 30px;
+      background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.94), rgba(248, 250, 252, 0.7)),
+        linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(22, 163, 74, 0.08));
+      border: 1px solid rgba(255, 255, 255, 0.86);
+      box-shadow: var(--shadow);
+      position: relative;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+    }
+
+    .screen-plate::before {
+      content: "";
+      position: absolute;
+      inset: 36px;
+      border-radius: 26px;
+      border: 1px dashed rgba(102, 112, 133, 0.20);
+    }
+
+    .widget {
+      width: 258px;
+      height: 130px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #fed7aa 0%, #fbcfe8 100%);
+      border: 1px solid rgba(251, 146, 60, 0.42);
+      box-shadow: 0 18px 46px rgba(15, 23, 42, 0.16);
+      padding: 14px 16px;
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 10px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .minus {
+      position: absolute;
+      right: 12px;
+      top: 8px;
+      color: #6b7280;
+      font-weight: 800;
+    }
+
+    .date {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .date span:first-child {
+      font-size: 16px;
+      color: #6b7280;
+      font-weight: 800;
+    }
+
+    .date strong {
+      font-size: 42px;
+      line-height: 0.95;
+    }
+
+    .date span:last-child {
+      margin-top: 6px;
+      font-size: 13px;
+      color: #6b7280;
+      font-weight: 800;
+    }
+
+    .count {
+      padding-top: 10px;
+    }
+
+    .count .label {
+      color: #6b7280;
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    .count .days {
+      color: #6b7280;
+      font-size: 16px;
+      font-weight: 900;
+      margin-top: 4px;
+    }
+
+    .count .time {
+      margin-top: 6px;
+      font-size: 22px;
+      font-weight: 900;
+    }
+
+    .count .time b {
+      font-size: 42px;
+      line-height: 1;
+    }
+
+    .count .ms {
+      color: var(--blue);
+      font-size: 18px;
+    }
+
+    .tab {
+      position: absolute;
+      right: 0;
+      top: 78px;
+      width: 42px;
+      height: 38px;
+      border-radius: 19px 0 0 19px;
+      background: #111827;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
+      z-index: 2;
+    }
+
+    .section-head {
+      margin-top: 48px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 20px;
+      border-top: 1px solid rgba(230, 234, 240, 0.9);
+      padding-top: 36px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 38px);
+      line-height: 1.15;
+      letter-spacing: 0;
+    }
+
+    .section-copy {
+      margin: 10px 0 0;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 680px;
+    }
+
+    .tool-grid {
+      margin-top: 24px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .tool-card {
+      min-height: 254px;
+      padding: 22px;
+      border: 1px solid rgba(230, 234, 240, 0.94);
+      border-radius: var(--radius);
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 10px 30px rgba(18, 24, 38, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .tool-card.active {
+      border-color: rgba(37, 99, 235, 0.22);
+      background:
+        linear-gradient(180deg, rgba(239, 246, 255, 0.78), rgba(255, 255, 255, 0.88));
+    }
+
+    .tool-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .tool-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      color: #ffffff;
+      font-weight: 900;
+      background: var(--blue);
+    }
+
+    .tool-icon.green {
+      background: var(--green);
+    }
+
+    .tool-icon.amber {
+      background: var(--amber);
+    }
+
+    .tool-icon.rose {
+      background: var(--rose);
+    }
+
+    .status {
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: #ecfdf3;
+      color: #067647;
+      font-size: 12px;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .status.soon {
+      background: #f2f4f7;
+      color: #667085;
+    }
+
+    .tool-card h3 {
+      margin: 0;
+      font-size: 20px;
+      line-height: 1.3;
+    }
+
+    .tool-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.72;
+      font-size: 14px;
+    }
+
+    .tool-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .pill {
+      padding: 6px 9px;
+      border-radius: 999px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      color: var(--soft-ink);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .card-actions a,
+    .card-actions span {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 38px;
+      padding: 0 13px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 14px;
+      border: 1px solid var(--line);
+      background: #ffffff;
+    }
+
+    .card-actions a.download {
+      color: #ffffff;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .card-actions span {
+      color: var(--muted);
+      background: #f8fafc;
+    }
+
+    .guide {
+      margin-top: 28px;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .guide-item {
+      padding: 18px;
+      border-radius: 16px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.72);
+    }
+
+    .guide-item strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+
+    .guide-item span {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+
+    .site-footer {
+      width: min(1120px, calc(100% - 40px));
+      margin: 0 auto;
+      padding: 0 0 36px;
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      border-top: 1px solid rgba(230, 234, 240, 0.9);
+      padding-top: 22px;
+    }
+
+    @media (max-width: 920px) {
+      .hero {
+        grid-template-columns: 1fr;
+        gap: 28px;
+      }
+
+      .preview-wrap {
+        min-height: 300px;
+      }
+
+      .tool-grid,
+      .guide {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 620px) {
+      .nav {
+        width: min(100% - 28px, 1120px);
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .page {
+        width: min(100% - 28px, 1120px);
+        padding-top: 34px;
+      }
+
+      h1 {
+        font-size: 38px;
+      }
+
+      .lead {
+        font-size: 16px;
+      }
+
+      .screen-plate {
+        border-radius: 22px;
+      }
+
+      .widget {
+        transform: scale(0.86);
+      }
+
+      .section-head {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .site-footer {
+        width: min(100% - 28px, 1120px);
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-header">
+    <nav class="nav" aria-label="主导航">
+      <a class="brand" href="#">
+        <span class="brand-mark">CT</span>
+        <span>Chanping Tools</span>
+      </a>
+      <div class="nav-links">
+        <a href="#tools">工具库</a>
+        <a href="#download">下载</a>
+        <a href="#guide">使用说明</a>
+      </div>
+    </nav>
+  </header>
+
+  <main class="page">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Windows 桌面小工具库</div>
+        <h1>把常用的小工具放在顺手的位置</h1>
+        <p class="lead">
+          这里会逐步收纳轻量、安静、开箱即用的 Windows 桌面工具。当前主工具是桌面倒计时浮窗，后续可以继续加入便签、专注计时、文件整理等小工具。
+        </p>
+        <div class="hero-actions" id="download">
+          <a class="button primary" href="/downloads/DesktopCountdownWidgetSetup-v1.0.0.exe" download>下载安装版 EXE</a>
+          <a class="button secondary" href="/downloads/DesktopCountdownWidget-v1.0.0.zip" download>下载便携版 zip</a>
+          <a class="button secondary" href="https://github.com/1309700796cp-dot/curly-waddle" target="_blank" rel="noreferrer">查看 GitHub</a>
+        </div>
+        <p class="mini-note">
+          推荐使用安装版 EXE：双击安装后会创建桌面和开始菜单入口。便携版 zip 需要先完整解压，再双击 <strong>Start-DesktopCalendar.cmd</strong> 启动。
+        </p>
+      </div>
+
+      <div class="preview-wrap" aria-label="倒计时浮窗预览">
+        <div class="screen-plate">
+          <div class="widget">
+            <div class="minus">-</div>
+            <div class="date">
+              <span>5月</span>
+              <strong>29</strong>
+              <span>星期五</span>
+            </div>
+            <div class="count">
+              <div class="label">毕业倒计时</div>
+              <div class="days">367天</div>
+              <div class="time">14:59:<b>59</b><span class="ms">.877</span></div>
+            </div>
+          </div>
+          <div class="tab">367</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tools" aria-labelledby="tools-title">
+      <div class="section-head">
+        <div>
+          <h2 id="tools-title">工具库</h2>
+          <p class="section-copy">当前先开放一个桌面浮窗工具，下面的位置已经按后续扩展预留。以后新增工具时，可以直接变成多工具下载页。</p>
+        </div>
+      </div>
+
+      <div class="tool-grid">
+        <article class="tool-card active">
+          <div class="tool-top">
+            <div class="tool-icon">01</div>
+            <span class="status">可下载</span>
+          </div>
+          <h3>桌面倒计时浮窗</h3>
+          <p>显示日期、毕业倒计时、法定节假日提醒，支持右侧小浮窗、背景主题和天气动效。</p>
+          <div class="tool-meta">
+            <span class="pill">Windows</span>
+            <span class="pill">便携版</span>
+            <span class="pill">开机自启动</span>
+          </div>
+          <div class="card-actions">
+            <a class="download" href="/downloads/DesktopCountdownWidgetSetup-v1.0.0.exe" download>下载 EXE</a>
+            <a href="/downloads/DesktopCountdownWidget-v1.0.0.zip" download>便携版 zip</a>
+            <a href="#guide">使用说明</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-top">
+            <div class="tool-icon green">02</div>
+            <span class="status soon">预留</span>
+          </div>
+          <h3>专注计时器</h3>
+          <p>后续可以放番茄钟、学习计时、休息提醒等功能，和桌面浮窗保持同一套视觉风格。</p>
+          <div class="tool-meta">
+            <span class="pill">计划中</span>
+            <span class="pill">Windows</span>
+          </div>
+          <div class="card-actions">
+            <span>暂未开放</span>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="tool-top">
+            <div class="tool-icon amber">03</div>
+            <span class="status soon">预留</span>
+          </div>
+          <h3>快捷便签</h3>
+          <p>后续可以加入桌面轻便签、待办提醒、临时记录等小工具，适合作为第二个下载项。</p>
+          <div class="tool-meta">
+            <span class="pill">计划中</span>
+            <span class="pill">轻量工具</span>
+          </div>
+          <div class="card-actions">
+            <span>暂未开放</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="guide" id="guide" aria-label="使用说明">
+      <div class="guide-item">
+        <strong>1. 推荐安装版</strong>
+        <span>下载安装版 EXE 后双击运行，会自动创建桌面和开始菜单入口。</span>
+      </div>
+      <div class="guide-item">
+        <strong>2. 便携版 zip</strong>
+        <span>如果下载 zip，请先完整解压，再双击 Start-DesktopCalendar.cmd。</span>
+      </div>
+      <div class="guide-item">
+        <strong>3. 开机自启动</strong>
+        <span>需要开机自动显示时，运行一次 Enable-Startup.cmd。</span>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>Chanping Tools</span>
+    <span>轻量 Windows 桌面工具集合</span>
+  </footer>
+</body>
+</html>
